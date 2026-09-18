@@ -6,8 +6,9 @@
   "scripts": {
     "dev": "npx -y serve -l 3000 .",
     "start": "npx -y serve -l 3000 .",
+    "build": "node bin/generar-galeria.mjs",
+    "artifact": "node bin/armar-artifact.mjs",
     "galeria": "node bin/generar-galeria.mjs",
-    "build": "node bin/armar-artifact.mjs",
     "test": "node --test"
   }
 }
