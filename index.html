@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FDF3EE">
+<meta name="robots" content="noindex, nofollow">
+<title>Carta de amor</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Caveat:wght@400..700&display=swap">
+<link rel="stylesheet" href="css/estilos.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 6'><path d='M1 0h2v1h2V0h2v3H6v1H5v1H3V4H2V3H1z' fill='%23D6455D'/></svg>">
+</head>
+<body>
+
+<canvas id="particulas" aria-hidden="true"></canvas>
+
+<audio id="cancion" loop preload="none"></audio>
+<button id="sonido" type="button" aria-label="Poner la música">♪</button>
+<button id="saltear" class="saltear" type="button">saltear ♥</button>
+
+<!-- ======================================================== 1. EL ARCO ==== -->
+<section id="escena-arco" class="escena" data-activa aria-label="El sobre y el arco">
+  <div class="arco-arriba">
+    <div id="sobre" class="sobre"></div>
+    <h1 id="titulo-sobre" class="titulo-sobre"></h1>
+  </div>
+
+  <div class="arco-abajo">
+    <svg id="arco-svg" viewBox="0 0 220 172" aria-hidden="true" focusable="false">
+      <path id="arco-madera" class="arco-madera"></path>
+      <path id="arco-luz" class="arco-luz"></path>
+      <path id="arco-cuerda" class="arco-cuerda"></path>
+      <g id="flecha" class="arco-flecha"></g>
+    </svg>
+
+    <div id="tension" class="tension" role="progressbar"
+         aria-label="Tensión del arco" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <div id="tension-barra" class="tension__barra"></div>
+    </div>
+
+    <p id="pista" class="pista"></p>
+  </div>
+</section>
+
+<!-- ======================================================== 2. EL GATO ==== -->
+<section id="escena-gato" class="escena" aria-label="La pregunta" aria-hidden="true" inert>
+  <div id="ventana" class="ventana">
+    <div class="ventana__barra">
+      <p id="ventana-titulo" class="ventana__titulo">AMOR</p>
+      <div class="ventana__botones" aria-hidden="true">
+        <span>_</span><span>□</span><span>×</span>
+      </div>
+    </div>
+
+    <div class="ventana__latidos" aria-hidden="true">
+      <span>♥</span><span>♥</span><span>♥</span>
+    </div>
+
+    <div id="ventana-cuerpo" class="ventana__cuerpo">
+      <p id="pregunta" class="pregunta" role="status"></p>
+
+      <div id="gato" class="gato">
+        <div id="gato-cara"></div>
+        <div id="gato-ojos" class="gato__ojos" aria-hidden="true"></div>
+        <button id="gato-corazon" class="gato__corazon" type="button" disabled
+                aria-label="Abrir la carta"></button>
+      </div>
+
+      <p id="pista-corazon" class="pista-corazon" aria-hidden="true"></p>
+
+      <div id="botones" class="botones">
+        <button id="boton-si" class="boton boton--si" type="button">SÍ</button>
+        <button id="boton-no" class="boton boton--no" type="button">NO</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================= 3. LA CARTA ==== -->
+<section id="escena-carta" class="escena" aria-label="La carta" aria-hidden="true" inert>
+  <div class="carta-envoltorio">
+
+    <div class="contador">
+      <p id="contador-etiqueta" class="contador__etiqueta"></p>
+      <p id="contador-fecha" class="contador__fecha"></p>
+      <p style="margin:0">
+        <span id="contador-dias" class="contador__numero"></span>
+        <span id="contador-unidad" class="contador__unidad"></span>
+      </p>
+      <p id="contador-detalle" class="contador__detalle"></p>
+    </div>
+
+    <article class="papel">
+      <p id="carta-titulo" class="papel__titulo"></p>
+      <p id="carta-saludo" class="papel__saludo"></p>
+      <div id="carta-cuerpo"></div>
+      <p id="carta-despedida" class="papel__despedida"></p>
+      <p id="carta-firma" class="papel__firma"></p>
+    </article>
+
+    <section class="galeria" aria-label="Galería de fotos">
+      <h2 id="galeria-titulo" class="galeria__titulo"></h2>
+      <p id="galeria-subtitulo" class="galeria__subtitulo"></p>
+      <div id="galeria-grilla" class="galeria__grilla"></div>
+    </section>
+
+    <div class="cierre">
+      <p id="cierre-texto" class="cierre__texto"></p>
+      <button id="reiniciar" class="boton" type="button">Verlo de nuevo</button>
+    </div>
+
+  </div>
+</section>
+
+<!-- ========================================================== visor ======= -->
+<div id="visor" role="dialog" aria-modal="true" aria-label="Foto ampliada">
+  <img alt="">
+  <p class="visor__pie"></p>
+  <button class="visor__control visor__control--cerrar" type="button" aria-label="Cerrar">×</button>
+  <button class="visor__control visor__control--previa" type="button" aria-label="Foto anterior">‹</button>
+  <button class="visor__control visor__control--proxima" type="button" aria-label="Foto siguiente">›</button>
+</div>
+
+<!-- Orden importante: core primero, después sprites, después la vista. -->
+<script src="contenido.js"></script>
+<script src="js/fotos-generado.js"></script>
+<script src="js/core/lienzo.js"></script>
+<script src="js/core/duracion.js"></script>
+<script src="js/core/esquivar.js"></script>
+<script src="js/core/arco.js"></script>
+<script src="js/sprites.js"></script>
+<script src="js/corazones.js"></script>
+<script src="js/galeria.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,6 @@
+#!/bin/sh
+# Tests de compuerta: deterministas, locales, gratis, menos de un segundo.
+# Si esto falla, el commit no sale. No lo saltees con --no-verify: arreglá la causa.
+set -e
+cd "$(git rev-parse --show-toplevel)"
+node --test

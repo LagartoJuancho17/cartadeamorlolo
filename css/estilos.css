@@ -1,0 +1,909 @@
+/* ============================================================================
+ *  Carta de amor — estilos
+ *  Paleta y ritmo sacados de las referencias: crema, rosas empolvados, rojo
+ *  corazón, y una tipografía pixel que convive con una serif clásica.
+ * ========================================================================== */
+
+:root {
+  /* color */
+  --crema: #FDF3EE;
+  --crema-hondo: #F8E5DE;
+  --rosa-humo: #F9DCE3;
+  --rosa: #F0A3B7;
+  --rosa-fuerte: #E08A9B;
+  --rojo: #D6455D;
+  --rojo-hondo: #A62A42;
+  --vino: #6E3441;
+  --vino-suave: #9A6874;
+  --papel: #FFFAF7;
+  --tinta: #45232D;
+  --madera: #8E6244;
+
+  /* tipografía */
+  --pixel: 'Pixelify Sans', ui-monospace, 'Courier New', monospace;
+  --serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --mano: 'Caveat', 'Segoe Script', cursive;
+
+  /* ritmo */
+  --gutter: clamp(1.25rem, 5vw, 2.5rem);
+  --columna: 40rem;
+  --curva: cubic-bezier(.22, 1, .36, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--crema);
+  background-image:
+    radial-gradient(120% 80% at 50% -10%, var(--rosa-humo) 0%, transparent 60%),
+    radial-gradient(90% 60% at 10% 110%, var(--crema-hondo) 0%, transparent 55%);
+  background-attachment: fixed;
+  color: var(--tinta);
+  font-family: var(--serif);
+  font-size: 100%;
+  line-height: 1.6;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+img { max-width: 100%; display: block; }
+
+/* --------------------------------------------------------------- utilidades */
+
+.oculto-visual {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+:focus-visible {
+  outline: 3px solid var(--rojo);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ------------------------------------------------------------- partículas -- */
+
+#particulas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 40;
+}
+
+/* ---------------------------------------------------------------- escenas -- */
+
+.escena {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--gutter);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: scale(.98);
+  transition: opacity .6s var(--curva), transform .6s var(--curva), visibility 0s .6s;
+  z-index: 1;
+}
+
+.escena[data-activa] {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: none;
+  transition: opacity .7s var(--curva), transform .7s var(--curva), visibility 0s;
+  z-index: 2;
+}
+
+/* ============================================================== 1. EL ARCO = */
+
+#escena-arco {
+  justify-content: center;
+  gap: clamp(2rem, 9vh, 4.5rem);
+  padding-block: clamp(1.5rem, 5vh, 3rem);
+  touch-action: none;
+}
+
+.arco-arriba {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(.75rem, 3vh, 1.5rem);
+  flex: 0 0 auto;
+}
+
+.sobre {
+  width: clamp(140px, 34vw, 232px);
+  filter: drop-shadow(0 12px 18px rgba(160, 90, 105, .18));
+  animation: flotar 5.5s ease-in-out infinite;
+  transform-origin: 50% 60%;
+}
+
+@keyframes flotar {
+  0%, 100% { transform: translateY(0) rotate(-.6deg); }
+  50%      { transform: translateY(-11px) rotate(.6deg); }
+}
+
+.sobre.golpeado { animation: sacudir .45s steps(2) 3; }
+
+@keyframes sacudir {
+  0%, 100% { transform: translate(0, 0) rotate(0); }
+  25%      { transform: translate(-5px, 2px) rotate(-2deg); }
+  75%      { transform: translate(5px, -2px) rotate(2deg); }
+}
+
+.sobre.abierto {
+  animation: abrirse 1s var(--curva) forwards;
+}
+
+@keyframes abrirse {
+  0%   { transform: scale(1); opacity: 1; }
+  45%  { transform: scale(1.14) translateY(-8px); opacity: 1; }
+  100% { transform: scale(2.4) translateY(-30px); opacity: 0; }
+}
+
+.titulo-sobre {
+  font-family: var(--pixel);
+  font-size: clamp(1.4rem, 5.5vw, 2.3rem);
+  font-weight: 600;
+  color: var(--rojo-hondo);
+  letter-spacing: .01em;
+  margin: 0;
+  text-align: center;
+}
+
+.titulo-sobre .corazoncito {
+  color: var(--rojo);
+  display: inline-block;
+  animation: latir 1.6s ease-in-out infinite;
+}
+
+@keyframes latir {
+  0%, 100% { transform: scale(1); }
+  40%      { transform: scale(1.22); }
+}
+
+/* --- el arco propiamente dicho ------------------------------------------- */
+
+.arco-abajo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+#arco-svg {
+  width: clamp(230px, 72vw, 360px);
+  height: auto;
+  overflow: visible;
+  cursor: grab;
+  touch-action: none;
+}
+
+#arco-svg:active { cursor: grabbing; }
+
+.arco-madera {
+  fill: none;
+  stroke: var(--madera);
+  stroke-width: 9;
+  stroke-linecap: round;
+}
+
+.arco-luz {
+  fill: none;
+  stroke: #B98A5F;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.arco-cuerda {
+  fill: none;
+  stroke: var(--vino-suave);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+#flecha-svg { width: 9px; }
+
+.arco-flecha { overflow: visible; }
+
+/* barra de tensión */
+
+.tension {
+  width: clamp(200px, 56vw, 300px);
+  height: 10px;
+  border: 2px solid var(--rosa-fuerte);
+  background: rgba(255, 255, 255, .5);
+  position: relative;
+  overflow: hidden;
+}
+
+.tension__barra {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0%;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--rosa) 0 6px,
+    var(--rosa-fuerte) 6px 12px
+  );
+  transition: width .06s linear;
+}
+
+.tension.listo { border-color: var(--rojo); }
+.tension.listo .tension__barra { background: var(--rojo); }
+
+.pista {
+  font-family: var(--pixel);
+  font-size: clamp(.8rem, 3.2vw, .95rem);
+  color: var(--vino-suave);
+  text-align: center;
+  margin: 0;
+  min-height: 1.4em;
+  transition: color .3s;
+}
+
+.pista.listo {
+  color: var(--rojo);
+  animation: pulso-pista 1s ease-in-out infinite;
+}
+
+@keyframes pulso-pista {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: .5; }
+}
+
+/* saltear (por si el arco no funciona en su teléfono) */
+
+.saltear {
+  position: fixed;
+  right: var(--gutter);
+  bottom: .9rem;
+  z-index: 50;
+  font-family: var(--pixel);
+  font-size: .75rem;
+  color: var(--vino-suave);
+  text-decoration: none;
+  border-bottom: 1px dotted currentColor;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .6s;
+  background: none;
+  border-top: 0; border-left: 0; border-right: 0;
+  cursor: pointer;
+  padding: .2rem 0;
+}
+
+.saltear.visible { opacity: .55; pointer-events: auto; }
+.saltear:hover { opacity: 1; color: var(--rojo); }
+
+/* ============================================================= 2. EL GATO == */
+
+.ventana {
+  width: min(100%, 26rem);
+  border: 3px solid var(--rosa-fuerte);
+  background: var(--papel);
+  box-shadow: 8px 8px 0 rgba(224, 138, 155, .35);
+  animation: entrar-ventana .8s var(--curva) both;
+}
+
+@keyframes entrar-ventana {
+  from { opacity: 0; transform: translateY(18px) scale(.94); }
+  to   { opacity: 1; transform: none; }
+}
+
+.ventana.despedida { animation: salir-ventana .9s var(--curva) forwards; }
+
+@keyframes salir-ventana {
+  0%   { transform: none; opacity: 1; }
+  30%  { transform: scale(1.04); }
+  100% { transform: scale(.82) translateY(-14px); opacity: 0; }
+}
+
+.ventana__barra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  padding: .4rem .6rem;
+  background: var(--rosa-humo);
+  border-bottom: 3px solid var(--rosa-fuerte);
+}
+
+.ventana__titulo {
+  font-family: var(--pixel);
+  font-size: .95rem;
+  font-weight: 600;
+  letter-spacing: .12em;
+  color: var(--vino);
+  margin: 0;
+}
+
+.ventana__botones { display: flex; gap: .3rem; }
+
+.ventana__botones span {
+  width: 18px;
+  height: 16px;
+  border: 2px solid var(--rosa-fuerte);
+  background: var(--papel);
+  font-family: var(--pixel);
+  font-size: .6rem;
+  line-height: 12px;
+  text-align: center;
+  color: var(--vino-suave);
+}
+
+.ventana__latidos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .55rem;
+  padding: .35rem;
+  background: var(--rosa-humo);
+  border-bottom: 3px solid var(--rosa-fuerte);
+  color: var(--rojo);
+  font-size: .8rem;
+  letter-spacing: .3em;
+}
+
+.ventana__latidos span { animation: latir 1.6s ease-in-out infinite; }
+.ventana__latidos span:nth-child(2) { animation-delay: .2s; }
+.ventana__latidos span:nth-child(3) { animation-delay: .4s; }
+
+.ventana__cuerpo {
+  position: relative;
+  padding: 1.4rem 1.1rem 1.6rem;
+  background-color: var(--rosa-humo);
+  background-image:
+    repeating-linear-gradient(0deg,  rgba(255,255,255,.55) 0 9px, transparent 9px 18px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.55) 0 9px, transparent 9px 18px);
+  text-align: center;
+  min-height: 21rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pregunta {
+  font-family: var(--pixel);
+  font-size: clamp(1rem, 4vw, 1.2rem);
+  line-height: 1.5;
+  color: var(--vino);
+  margin: 0;
+  max-width: 21rem;
+  min-height: 3.2em;
+  transition: opacity .35s;
+}
+
+.pregunta.cambiando { opacity: 0; }
+
+/* --- el gato -------------------------------------------------------------- */
+
+.gato {
+  position: relative;
+  width: clamp(132px, 44vw, 186px);
+  flex: 0 0 auto;
+  /* el corazón cuelga un 20% por debajo de la cara: sin este aire, la pista
+     de "tocá mi corazón" queda tapada */
+  margin-bottom: clamp(1.8rem, 7vw, 2.6rem);
+}
+
+.gato__cara { display: block; width: 100%; }
+
+.gato__ojos {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  /* los ojos ocupan 3 filas de las 18 del sprite, arrancando en la 8 */
+  top: calc(8 / 18 * 100%);
+  height: calc(3 / 18 * 100%);
+}
+
+.gato__ojos svg { width: 100%; height: 100%; display: block; }
+.gato__ojos svg:not([data-visible]) { display: none; }
+
+.gato.saltando { animation: saltito .55s var(--curva) 3; }
+
+@keyframes saltito {
+  0%, 100% { transform: translateY(0) scale(1); }
+  35%      { transform: translateY(-12px) scale(1.04, .96); }
+  70%      { transform: translateY(0) scale(.97, 1.03); }
+}
+
+/* el corazón que sostiene el gato */
+
+.gato__corazon {
+  position: absolute;
+  left: 50%;
+  bottom: -20%;
+  width: 44%;
+  transform: translateX(-50%);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: default;
+  filter: drop-shadow(0 3px 0 rgba(166, 42, 66, .35));
+  animation: latir-corazon 1.7s ease-in-out infinite;
+}
+
+@keyframes latir-corazon {
+  0%, 100% { transform: translateX(-50%) scale(1); }
+  30%      { transform: translateX(-50%) scale(1.09); }
+  45%      { transform: translateX(-50%) scale(1.02); }
+  60%      { transform: translateX(-50%) scale(1.07); }
+}
+
+.gato__corazon svg { width: 100%; display: block; }
+
+.gato__corazon[data-tocable] {
+  cursor: pointer;
+  filter: drop-shadow(0 0 10px rgba(214, 69, 93, .65)) drop-shadow(0 3px 0 rgba(166, 42, 66, .35));
+}
+
+.gato__corazon[data-tocable]:hover { animation-duration: .8s; }
+
+.pista-corazon {
+  font-family: var(--pixel);
+  font-size: .8rem;
+  color: var(--rojo);
+  margin: 0;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity .5s, transform .5s;
+  pointer-events: none;
+}
+
+.pista-corazon.visible { opacity: 1; transform: none; animation: pulso-pista 1.6s ease-in-out infinite; }
+
+/* --- los botones ---------------------------------------------------------- */
+
+.botones {
+  position: relative;
+  width: 100%;
+  min-height: 4.75rem;
+  margin-top: auto;
+}
+
+.boton {
+  font-family: var(--pixel);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  color: var(--vino);
+  background: var(--papel);
+  border: 3px solid var(--vino);
+  box-shadow: 4px 4px 0 var(--vino);
+  padding: .6rem 1.7rem;
+  cursor: pointer;
+  transition: transform .12s, box-shadow .12s, background .2s;
+}
+
+.boton:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 var(--vino);
+}
+
+.boton--si {
+  background: var(--rojo);
+  color: var(--papel);
+  border-color: var(--rojo-hondo);
+  box-shadow: 4px 4px 0 var(--rojo-hondo);
+  position: absolute;
+  left: 25%;
+  top: 1rem;
+  transform: translateX(-50%) scale(var(--escala, 1));
+  transform-origin: center;
+  transition: transform .25s var(--curva), box-shadow .12s;
+}
+
+.boton--si:active { transform: translateX(-50%) scale(var(--escala, 1)) translate(4px, 4px); box-shadow: none; }
+
+.boton--no {
+  position: absolute;
+  left: 75%;
+  top: 1rem;
+  transform: translateX(-50%) scale(var(--escala, 1));
+  transition: left .28s var(--curva), top .28s var(--curva), transform .25s var(--curva);
+}
+
+/* Una vez que huye se sale de la fila de botones y pasa a moverse por toda la
+   ventana, así que sus coordenadas son relativas al cuerpo de la ventana. */
+.boton--no[data-suelto] {
+  left: var(--x);
+  top: var(--y);
+  transform: scale(var(--escala, 1));
+}
+
+.boton--no.rendido {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .4s;
+}
+
+.botones.resuelto .boton--si { left: 50%; }
+
+/* la flecha que cruza la pantalla de verdad */
+.flecha-vuelo {
+  will-change: transform;
+  filter: drop-shadow(0 2px 4px rgba(110, 52, 65, .28));
+}
+
+/* ============================================================ 3. LA CARTA == */
+
+#escena-carta {
+  justify-content: flex-start;
+  padding-block: clamp(2.5rem, 9vh, 5rem);
+}
+
+.carta-envoltorio {
+  width: 100%;
+  max-width: var(--columna);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2.5rem, 8vh, 4.5rem);
+}
+
+/* --- contador ------------------------------------------------------------- */
+
+.contador {
+  text-align: center;
+  animation: subir .9s var(--curva) both;
+}
+
+.contador__etiqueta {
+  font-family: var(--pixel);
+  font-size: .78rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--vino-suave);
+  margin: 0 0 .5rem;
+}
+
+.contador__fecha {
+  font-family: var(--serif);
+  font-size: clamp(1.7rem, 7vw, 2.6rem);
+  font-weight: 500;
+  font-style: italic;
+  color: var(--vino);
+  margin: 0 0 1.4rem;
+  line-height: 1.15;
+}
+
+.contador__numero {
+  font-family: var(--pixel);
+  font-size: clamp(3rem, 15vw, 5.2rem);
+  font-weight: 700;
+  color: var(--rojo);
+  line-height: 1;
+  display: block;
+  font-variant-numeric: tabular-nums;
+}
+
+.contador__unidad {
+  font-family: var(--pixel);
+  font-size: .85rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--vino-suave);
+  display: block;
+  margin-top: .45rem;
+}
+
+.contador__detalle {
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  color: var(--vino-suave);
+  margin: 1.1rem 0 0;
+}
+
+.contador__reloj {
+  font-family: var(--pixel);
+  font-variant-numeric: tabular-nums;
+  color: var(--rojo);
+  letter-spacing: .06em;
+}
+
+/* --- el papel ------------------------------------------------------------- */
+
+.papel {
+  position: relative;
+  background: var(--papel);
+  border: 1px solid rgba(224, 138, 155, .45);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, .9) inset,
+    0 18px 40px -22px rgba(110, 52, 65, .45);
+  padding: clamp(1.8rem, 6vw, 3.4rem);
+}
+
+.papel::before {
+  /* pliegue de una hoja que estuvo doblada: tiene que insinuarse, no cortar
+     el texto en dos. Una banda ancha y muy tenue, no una línea. */
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent 44%,
+    rgba(224, 138, 155, .05) 49.5%,
+    rgba(224, 138, 155, .07) 50%,
+    rgba(224, 138, 155, .05) 50.5%,
+    transparent 56%
+  );
+}
+
+.papel__titulo {
+  font-family: var(--pixel);
+  font-size: .78rem;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--rosa-fuerte);
+  text-align: center;
+  margin: 0 0 1.8rem;
+}
+
+.papel__saludo {
+  font-family: var(--mano);
+  font-size: clamp(1.7rem, 6vw, 2.2rem);
+  color: var(--rojo-hondo);
+  margin: 0 0 1.2rem;
+  line-height: 1.1;
+}
+
+.papel p.parrafo {
+  font-size: clamp(1.02rem, 2.6vw, 1.16rem);
+  line-height: 1.85;
+  color: var(--tinta);
+  margin: 0 0 1.35rem;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity .9s var(--curva), transform .9s var(--curva);
+}
+
+.papel p.parrafo.leida { opacity: 1; transform: none; }
+
+.papel__despedida {
+  font-size: clamp(1.05rem, 2.8vw, 1.2rem);
+  font-style: italic;
+  color: var(--vino);
+  margin: 2rem 0 .4rem;
+}
+
+.papel__firma {
+  font-family: var(--mano);
+  font-size: clamp(1.9rem, 7vw, 2.5rem);
+  color: var(--rojo);
+  text-align: right;
+  margin: 0;
+  line-height: 1;
+}
+
+/* --- galería -------------------------------------------------------------- */
+
+.galeria__titulo {
+  font-family: var(--serif);
+  font-size: clamp(1.6rem, 6vw, 2.1rem);
+  font-style: italic;
+  color: var(--vino);
+  text-align: center;
+  margin: 0 0 .3rem;
+}
+
+.galeria__subtitulo {
+  font-family: var(--pixel);
+  font-size: .78rem;
+  letter-spacing: .12em;
+  color: var(--vino-suave);
+  text-align: center;
+  margin: 0 0 1.8rem;
+}
+
+.galeria__grilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(140px, 44%), 1fr));
+  gap: .85rem;
+}
+
+.foto {
+  position: relative;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 0;
+  background: var(--papel);
+  box-shadow: 0 6px 18px -10px rgba(110, 52, 65, .6);
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform .35s var(--curva), box-shadow .35s var(--curva);
+}
+
+.foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .5s var(--curva);
+}
+
+.foto:hover { transform: translateY(-4px) rotate(-.7deg); box-shadow: 0 14px 26px -12px rgba(110, 52, 65, .55); }
+.foto:hover img { transform: scale(1.05); }
+
+.foto__pie {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: .45rem .55rem;
+  font-family: var(--pixel);
+  font-size: .68rem;
+  color: #fff;
+  background: linear-gradient(transparent, rgba(69, 35, 45, .78));
+  text-align: left;
+  opacity: 0;
+  transition: opacity .3s;
+}
+
+.foto:hover .foto__pie, .foto:focus-visible .foto__pie { opacity: 1; }
+
+.foto--vacia {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: .6rem;
+  background: rgba(255, 255, 255, .45);
+  border: 2px dashed var(--rosa-fuerte);
+  color: var(--rosa-fuerte);
+  cursor: default;
+  font-family: var(--pixel);
+  font-size: .7rem;
+  text-align: center;
+  padding: .8rem;
+}
+
+.foto--vacia:hover { transform: none; box-shadow: 0 6px 18px -10px rgba(110, 52, 65, .6); }
+.foto--vacia svg { width: 34px; }
+
+/* --- cierre --------------------------------------------------------------- */
+
+.cierre {
+  text-align: center;
+  padding-bottom: 2rem;
+}
+
+.cierre__texto {
+  font-family: var(--mano);
+  font-size: clamp(1.7rem, 6.5vw, 2.3rem);
+  color: var(--rojo);
+  margin: 0 0 1.6rem;
+  line-height: 1.2;
+}
+
+.cierre .boton { font-size: .85rem; padding: .55rem 1.3rem; }
+
+/* --------------------------------------------------------------- lightbox -- */
+
+#visor {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: none;
+  place-items: center;
+  padding: var(--gutter);
+  background: rgba(69, 35, 45, .88);
+  backdrop-filter: blur(6px);
+}
+
+#visor[data-abierto] { display: grid; animation: aparecer .3s ease both; }
+
+@keyframes aparecer { from { opacity: 0; } to { opacity: 1; } }
+
+#visor img {
+  max-width: min(100%, 60rem);
+  max-height: 78vh;
+  object-fit: contain;
+  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .8);
+  animation: subir .4s var(--curva) both;
+}
+
+@keyframes subir {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.visor__pie {
+  position: absolute;
+  inset: auto 0 calc(var(--gutter) + .2rem) 0;
+  text-align: center;
+  font-family: var(--pixel);
+  font-size: .8rem;
+  color: rgba(255, 250, 247, .85);
+  margin: 0;
+  padding-inline: 4rem;
+}
+
+.visor__control {
+  position: absolute;
+  background: rgba(255, 250, 247, .12);
+  border: 2px solid rgba(255, 250, 247, .5);
+  color: var(--papel);
+  font-family: var(--pixel);
+  font-size: 1.1rem;
+  width: 2.75rem;
+  height: 2.75rem;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background .2s, transform .2s;
+}
+
+.visor__control:hover { background: rgba(255, 250, 247, .28); }
+.visor__control:active { transform: scale(.94); }
+
+.visor__control--cerrar { top: var(--gutter); right: var(--gutter); }
+.visor__control--previa  { left: var(--gutter); top: 50%; transform: translateY(-50%); }
+.visor__control--proxima { right: var(--gutter); top: 50%; transform: translateY(-50%); }
+.visor__control--previa:active, .visor__control--proxima:active { transform: translateY(-50%) scale(.94); }
+
+/* ------------------------------------------------------------------ audio -- */
+
+#sonido {
+  position: fixed;
+  top: var(--gutter);
+  right: var(--gutter);
+  z-index: 50;
+  width: 2.4rem;
+  height: 2.4rem;
+  display: none;
+  place-items: center;
+  border: 2px solid var(--rosa-fuerte);
+  background: rgba(255, 250, 247, .8);
+  color: var(--rojo);
+  font-size: .95rem;
+  cursor: pointer;
+  transition: transform .2s, background .2s;
+}
+
+#sonido[data-disponible] { display: grid; }
+#sonido:hover { transform: scale(1.08); }
+
+/* ------------------------------------------------------------ responsive -- */
+
+@media (max-width: 30rem) {
+  .ventana__cuerpo { min-height: 20rem; padding-inline: .8rem; }
+  .boton { padding: .55rem 1.2rem; font-size: .92rem; }
+  .visor__control--previa  { left: .5rem; }
+  .visor__control--proxima { right: .5rem; }
+  .visor__pie { padding-inline: 1rem; }
+}
+
+@media (max-height: 40rem) {
+  .sobre { width: clamp(110px, 26vw, 160px); }
+  #arco-svg { width: clamp(200px, 60vw, 280px); }
+}
+
+/* ---------------------------------------------------- movimiento reducido -- */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+  .papel p.parrafo { opacity: 1; transform: none; }
+  #particulas { display: none; }
+}
