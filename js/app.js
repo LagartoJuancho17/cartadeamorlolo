@@ -21,6 +21,7 @@
   var ESCALA_FLECHA = A.arco.G.largoFlecha / A.sprites.FLECHA.alto;
 
   var particulas = A.corazones.crear($('#particulas'));
+  var sfx = A.sonido.crear({ porDefecto: C.sonido !== false });
   var esTacto = raiz.matchMedia && raiz.matchMedia('(hover: none)').matches;
 
   // ======================================================== dibujar sprites ==
@@ -153,6 +154,8 @@
         // flecha del teclado no llega nunca al umbral.
         if (A.arco.debeRelajar(quieto)) {
           estadoArco.tension = A.arco.relajar(estadoArco.tension, dt);
+          sfx.tensarActualizar(estadoArco.tension);
+          if (estadoArco.tension === 0) sfx.tensarFin();
         }
         pintarArco();
       }
@@ -162,7 +165,11 @@
 
   function tocar(incremento) {
     if (estadoArco.disparado) return;
+    // despertar() tiene que pasar acá adentro, sincrónicamente: es el primer
+    // gesto de la persona y es la única ventana en que iOS deja arrancar audio.
+    sfx.despertar();
     estadoArco.tension = A.arco.tensar(estadoArco.tension, incremento);
+    sfx.tensarActualizar(estadoArco.tension);
     ultimoGesto = performance.now();
     liberado = false;
   }
@@ -180,6 +187,10 @@
 
     var g = A.arco.geometria(estadoArco.tension, 0.5);
     var origen = aPantalla({ x: g.flecha.x, y: g.flecha.colaY });
+
+    sfx.tensarFin();
+    sfx.tocar('disparo');
+    sfx.tocar('vuelo');
 
     // La cuerda vuelve de golpe y la flecha del SVG desaparece.
     estadoArco.tension = 0;
@@ -230,12 +241,14 @@
       30, 1.15
     );
     sobre.classList.add('golpeado');
+    sfx.tocar('impacto');
     prenderCancion();
 
     setTimeout(function () {
       sobre.classList.remove('golpeado');
       sobre.innerHTML = A.sprites.aSVG(A.sprites.SOBRE_ABIERTO);
       sobre.classList.add('abierto');
+      sfx.tocar('abrir');
       particulas.estallido(
         cajaSobre.left + cajaSobre.width / 2,
         cajaSobre.top + cajaSobre.height * 0.4,
@@ -342,8 +355,11 @@
     mostrarSaltearEn(20000);
   }
 
+  var ultimoSalto = 0;
+
   function escapar(e) {
     if (yaDijoQueSi) return;
+    if (!A.esquivar.puedeSaltar(performance.now() - ultimoSalto)) return;
 
     // La primera vez que huye se sale de la fila de botones y pasa a moverse
     // por toda la ventana: si no, su padre posicionado lo encierra en 5rem.
@@ -370,6 +386,7 @@
     });
 
     intentosNo++;
+    ultimoSalto = performance.now();
     var escala = A.esquivar.escalas(intentosNo);
     btnNo.setAttribute('data-suelto', '');
     btnNo.style.setProperty('--x', destino.x + 'px');
@@ -412,6 +429,8 @@
     btnSi.disabled = true;
     humorOjos('feliz');
     gato.classList.add('saltando');
+    sfx.despertar();
+    sfx.tocar('si');
     prenderCancion();
 
     particulas.desdeElemento(btnSi, 40, 1.4);
@@ -435,6 +454,7 @@
   corazonGato.addEventListener('click', function () {
     if (!corazonGato.hasAttribute('data-tocable')) return;
     corazonGato.removeAttribute('data-tocable');
+    sfx.tocar('corazon');
     particulas.desdeElemento(corazonGato, 46, 1.5);
     particulas.lluvia(30);
     ventana.classList.add('despedida');
@@ -476,7 +496,9 @@
       grilla: $('#galeria-grilla'),
       visor: $('#visor'),
       fotos: C.fotos || [],
-      textoVacio: (C.galeria && C.galeria.vacio) || ''
+      textoVacio: (C.galeria && C.galeria.vacio) || '',
+      alAbrir: function () { sfx.despertar(); sfx.tocar('foto'); },
+      alPasar: function () { sfx.tocar('pasar'); }
     });
 
     arrancarContador();
@@ -529,6 +551,7 @@
 
   $('#reiniciar').addEventListener('click', function () {
     clearInterval(relojContador);
+    sfx.tocar('reinicio');
 
     estadoArco = A.arco.crear();
     arrastrando = false;
@@ -540,6 +563,7 @@
     arrancarArco();
 
     intentosNo = 0;
+    ultimoSalto = 0;
     yaDijoQueSi = false;
     cajaBotones.classList.remove('resuelto');
     btnSi.disabled = false;
@@ -587,39 +611,43 @@
     irA('carta');
   });
 
-  // --- canción (opcional) ----------------------------------------------------
-  var audio = $('#cancion');
+  // --- el botón de sonido ----------------------------------------------------
+  // Manda sobre todo: los efectos y, si hay, la canción. La preferencia queda
+  // guardada en el navegador de quien mira, así que si lo apaga una vez, no se
+  // lo vuelve a encontrar prendido al recargar.
+  var cancion = $('#cancion');
   var btnSonido = $('#sonido');
   var sonando = false;
 
+  function pintarBotonSonido() {
+    var prendido = sfx.encendido;
+    btnSonido.innerHTML = A.sprites.aSVG(
+      prendido ? A.sprites.ALTAVOZ : A.sprites.ALTAVOZ_MUDO,
+      { paleta: Object.assign({}, A.sprites.PALETA, { K: prendido ? '#D6455D' : '#C09AA3' }) }
+    );
+    btnSonido.setAttribute('aria-pressed', prendido ? 'true' : 'false');
+    btnSonido.setAttribute('aria-label', prendido ? 'Apagar el sonido' : 'Prender el sonido');
+    btnSonido.classList.toggle('mudo', !prendido);
+  }
+
   function prenderCancion() {
-    if (!C.cancion || sonando) return;
-    audio.volume = 0.45;
-    var intento = audio.play();
+    if (!C.cancion || sonando || !sfx.encendido) return;
+    cancion.volume = 0.32;
+    var intento = cancion.play();
     if (intento && intento.then) {
-      intento.then(function () {
-        sonando = true;
-        btnSonido.textContent = '♪';
-        btnSonido.setAttribute('aria-label', 'Silenciar la música');
-      }).catch(function () { /* el navegador la bloqueó: queda el botón */ });
+      intento.then(function () { sonando = true; })
+             .catch(function () { /* el navegador la bloqueó: queda el botón */ });
     }
   }
 
-  if (C.cancion) {
-    audio.src = C.cancion;
-    btnSonido.setAttribute('data-disponible', '');
-    btnSonido.addEventListener('click', function () {
-      if (audio.paused) {
-        audio.play();
-        sonando = true;
-        btnSonido.textContent = '♪';
-      } else {
-        audio.pause();
-        sonando = false;
-        btnSonido.textContent = '♪̸';
-      }
-    });
-  }
+  if (C.cancion) cancion.src = C.cancion;
+
+  btnSonido.addEventListener('click', function () {
+    var prendido = sfx.alternar();
+    if (!prendido && !cancion.paused) { cancion.pause(); sonando = false; }
+    else if (prendido) prenderCancion();
+    pintarBotonSonido();
+  });
 
   // ================================================================ arranque ==
 
@@ -645,6 +673,7 @@
     $('#cierre-texto').textContent = (C.cierre && C.cierre.texto) || '';
     $('#reiniciar').textContent = (C.cierre && C.cierre.reiniciar) || 'Verlo de nuevo';
 
+    pintarBotonSonido();
     pintarArco();
     arrancarArco();
     particulas.ambiente(true);

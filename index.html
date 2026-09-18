@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#FDF3EE">
 <meta name="robots" content="noindex, nofollow">
-<title>Carta de amor</title>
+<title>Carta de amor para Lolito</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +18,7 @@
 <canvas id="particulas" aria-hidden="true"></canvas>
 
 <audio id="cancion" loop preload="none"></audio>
-<button id="sonido" type="button" aria-label="Poner la música">♪</button>
+<button id="sonido" type="button" aria-label="Apagar el sonido" aria-pressed="true"></button>
 <button id="saltear" class="saltear" type="button">saltear ♥</button>
 
 <!-- ======================================================== 1. EL ARCO ==== -->
@@ -49,7 +49,8 @@
 <section id="escena-gato" class="escena" aria-label="La pregunta" aria-hidden="true" inert>
   <div id="ventana" class="ventana">
     <div class="ventana__barra">
-      <p id="ventana-titulo" class="ventana__titulo">AMOR</p>
+      <!-- el texto lo pone contenido.js -> gato.ventana -->
+      <p id="ventana-titulo" class="ventana__titulo"></p>
       <div class="ventana__botones" aria-hidden="true">
         <span>_</span><span>□</span><span>×</span>
       </div>
@@ -109,7 +110,7 @@
 
     <div class="cierre">
       <p id="cierre-texto" class="cierre__texto"></p>
-      <button id="reiniciar" class="boton" type="button">Verlo de nuevo</button>
+      <button id="reiniciar" class="boton" type="button"></button>
     </div>
 
   </div>
@@ -131,8 +132,10 @@
 <script src="js/core/duracion.js"></script>
 <script src="js/core/esquivar.js"></script>
 <script src="js/core/arco.js"></script>
+<script src="js/core/recetas-sonido.js"></script>
 <script src="js/sprites.js"></script>
 <script src="js/corazones.js"></script>
+<script src="js/sonido.js"></script>
 <script src="js/galeria.js"></script>
 <script src="js/app.js"></script>
 

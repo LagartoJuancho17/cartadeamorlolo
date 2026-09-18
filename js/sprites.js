@@ -105,6 +105,33 @@
     '...RR...'
   ]);
 
+  // -------------------------------------------------------------- altavoz --
+  // El botón de sonido. Dibujado, no un carácter: un ♪ tachado se ve distinto
+  // en cada teléfono y la mitad de las veces no se entiende si está prendido.
+  var ALTAVOZ = L.desdeTexto([
+    '.....K.....',
+    '....KK.....',
+    '...KKK..K..',
+    'KKKKKK.K.K.',
+    'KKKKKK.K.K.',
+    'KKKKKK.K.K.',
+    '...KKK..K..',
+    '....KK.....',
+    '.....K.....'
+  ]);
+
+  var ALTAVOZ_MUDO = L.desdeTexto([
+    '.....K.....',
+    '....KK.....',
+    '...KKK.....',
+    'KKKKKK.K.K.',
+    'KKKKKK..K..',
+    'KKKKKK.K.K.',
+    '...KKK.....',
+    '....KK.....',
+    '.....K.....'
+  ]);
+
   // ----------------------------------------------------------------- sobre --
   function construirSobre() {
     var l = L.crear(32, 22);
@@ -225,6 +252,8 @@
     OJOS_Y: OJOS_Y,
     CORAZON: CORAZON,
     CORAZON_CHICO: CORAZON_CHICO,
+    ALTAVOZ: ALTAVOZ,
+    ALTAVOZ_MUDO: ALTAVOZ_MUDO,
     SOBRE: SOBRE,
     SOBRE_ABIERTO: SOBRE_ABIERTO,
     FLECHA: FLECHA,

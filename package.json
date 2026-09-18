@@ -1,0 +1,13 @@
+{
+  "name": "carta-de-amor",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Una tarjeta digital interactiva para celebrar el aniversario",
+  "scripts": {
+    "dev": "npx -y serve -l 3000 .",
+    "start": "npx -y serve -l 3000 .",
+    "galeria": "node bin/generar-galeria.mjs",
+    "build": "node bin/armar-artifact.mjs",
+    "test": "node --test"
+  }
+}

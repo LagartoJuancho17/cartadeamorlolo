@@ -21,6 +21,7 @@
   var CANDIDATAS = 24;      // cuántas posiciones se prueban por salto
   var MARGEN = 6;           // px de aire contra el borde del contenedor
   var SEPARACION = 10;      // px de aire contra los rectángulos a evitar
+  var ESPERA_SALTO = 220;   // ms mínimos entre salto y salto
 
   function limitar(valor, min, max) {
     if (max < min) return min;
@@ -42,6 +43,18 @@
     var dx = Math.max(rect.x - punto.x, 0, punto.x - (rect.x + rect.ancho));
     var dy = Math.max(rect.y - punto.y, 0, punto.y - (rect.y + rect.alto));
     return Math.hypot(dx, dy);
+  }
+
+  /**
+   * ¿Ya pasó tiempo suficiente desde el último salto?
+   *
+   * El botón huye con pointermove, con pointerdown y con click. Un solo intento
+   * de clic dispara los tres, uno detrás del otro: sin este freno el botón
+   * salta tres veces seguidas (se ve como un temblor), el contador de intentos
+   * avanza de a tres y se saltea burlas.
+   */
+  function puedeSaltar(msDesdeElUltimo) {
+    return !(msDesdeElUltimo >= 0) || msDesdeElUltimo >= ESPERA_SALTO;
   }
 
   /** ¿El puntero está lo bastante cerca como para que el botón salte? */
@@ -132,6 +145,8 @@
   return {
     nuevaPosicion: nuevaPosicion,
     debeEsquivar: debeEsquivar,
+    puedeSaltar: puedeSaltar,
+    ESPERA_SALTO: ESPERA_SALTO,
     seSuperponen: seSuperponen,
     distanciaAlRect: distanciaAlRect,
     burla: burla,

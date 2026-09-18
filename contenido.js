@@ -16,12 +16,12 @@ window.CONTENIDO = {
 
   /* --- Ella ---------------------------------------------------------------- */
   // Como la llamás vos. Aparece en la carta y en la pestaña del navegador.
-  nombre: 'mi amor',
+  nombre: 'Lolito',
 
   /* --- La fecha ------------------------------------------------------------ */
   // El día que se pusieron de novios. Si te acordás la hora, podés escribir
   // '2024-09-18T21:30' y el contador va a ser exacto hasta el segundo.
-  fechaInicio: '2024-09-18',        // <-- CAMBIÁ ESTO
+  fechaInicio: '2024-09-19',        // <-- CAMBIÁ ESTO
 
   /* --- El sobre (primera pantalla) ----------------------------------------- */
   sobre: {
@@ -33,11 +33,11 @@ window.CONTENIDO = {
 
   /* --- El gatito (segunda pantalla) ---------------------------------------- */
   gato: {
-    ventana: 'AMOR',
+    ventana: 'Lolo',
     pregunta: 'Feliz 2 años, mi amor ♡ ¿Me seguís amando?',
     si: 'SÍ',
     no: 'NO',
-    festejo: '¡Yaaay! Te amo ♡',
+    festejo: 'Siiii! Te amo ♡ Papoi',
     remate: 'Dos años de viaje y toda una vida por delante.',
     pistaCorazon: 'tocá mi corazón'
   },
@@ -50,15 +50,20 @@ window.CONTENIDO = {
     titulo: 'Para vos',
     saludo: 'Mi amor,',
     parrafos: [
-      'Hace dos años que existe una fecha que divide mi vida en antes y después, y es la de hoy. No sé bien cómo pasó: un día estabas del otro lado de una conversación y al siguiente ya eras el lugar al que vuelvo.',
+      'Lo, Lolo, Lola, Lolita, y demás apodos que te puse y te pondré en el futuro.',
 
-      'Me gusta cómo te reís cuando algo te causa gracia de verdad, esa risa que no podés frenar. Me gusta cómo te ponés seria cuando algo te importa. Me gusta que me escuches hasta el final incluso cuando estoy diciendo cualquier cosa, y que después me digas la verdad igual.',
+      'La verdad es que no se cómo arrancar esta carta…',
 
-      'De estos dos años me quedo con lo chiquito: los viajes en auto con música fuerte, las comidas improvisadas, las charlas a las tres de la mañana que empiezan en una pavada y terminan en algo enorme. Los planes que hicimos y los que todavía no.',
+      'Quizás porque no se me ocurren palabras para resumir lo que fueron estos dos años. Así que voy a intentar ser lo mas conciso posiblel: Gracias por cruzarte en mi vida y por quedarte a construir todo esto conmigo.',
 
-      'Gracias por bancarme los días en los que no soy fácil. Gracias por celebrar las cosas que a nadie más le parecen importantes. Gracias por elegirme de nuevo cada mañana, incluso los días en los que no era obvio.',
+      'Me encanta ver cómo crecés, la fuerza que le ponés a todo y esa energía que transforma cualquier espacio en un lugar más divertido y familiar. Sos mi persona favorita para volver a casa, para salir a cualquier lado o para mimir siesta y no hacer absolutamente nada.',
 
-      'Te amo. Te amo de una manera tranquila y también de una manera que no me deja dormir. Y si me dieran a elegir otra vez, te elegiría en el primer intento, sin pensarlo, todas las veces.'
+      'Te deseo proyectos que te apasionen, risas y toda la felicidad que siempre das, multiplicada por mil. Yo solo te prometo seguir estando al lado tuyo: para festejarte cada logro, darte la mano en las malas y seguir inventando apodos ridículos que solo nosotros entendamos.',
+
+      'Gracias por estos dos años tan hermosos de los cuales me llevo los recuerdos mas lindos de mi vida.',
+
+      'Pd: Vinci tambien te quiere mucho mucho mucho mucho, no hay mejor madre para él.'
+
     ],
     despedida: 'Feliz aniversario, mi amor.',
     firma: 'Toto'
@@ -83,6 +88,14 @@ window.CONTENIDO = {
     texto: 'Gracias por estos dos años.',
     reiniciar: 'Verlo de nuevo'
   },
+
+  /* --- Sonido -------------------------------------------------------------- *
+   *  Los efectos (arco, flechazo, boing del NO, fanfarria del SÍ, latido) son
+   *  sintetizados: no hay archivos de audio. Poné false si querés que arranque
+   *  en silencio. Ella igual lo puede prender con el botón de arriba a la
+   *  derecha, y el navegador se acuerda de lo que eligió.
+   * ------------------------------------------------------------------------- */
+  sonido: true,
 
   /* --- Canción (opcional) --------------------------------------------------- *
    *  Poné un archivo en audio/ y escribí acá el nombre, por ejemplo:

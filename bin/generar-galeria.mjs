@@ -17,13 +17,14 @@
  *    "IMG_4821.jpg"                       ->  (sin pie)
  */
 
-import { readdir, writeFile } from 'node:fs/promises';
+import { readdir, readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CARPETA = path.join(RAIZ, 'fotos');
 const SALIDA = path.join(RAIZ, 'js', 'fotos-generado.js');
+const FOTOS_JSON = path.join(RAIZ, 'fotos.json');
 
 const EXTENSIONES = new Set(['.jpg', '.jpeg', '.png', '.webp', '.gif', '.avif']);
 
@@ -65,6 +66,21 @@ async function main() {
     process.exit(1);
   }
 
+  const mapaTextos = new Map();
+  try {
+    const dataJson = JSON.parse(await readFile(FOTOS_JSON, 'utf8'));
+    if (Array.isArray(dataJson)) {
+      for (const item of dataJson) {
+        const key = item.imagen || item.src || item.foto;
+        const texto = item.texto || item.p || item.pie;
+        if (key && texto) {
+          mapaTextos.set(key, texto);
+          mapaTextos.set(path.basename(key), texto);
+        }
+      }
+    }
+  } catch {}
+
   const fotos = archivos
     .filter((f) => !f.startsWith('.'))
     .filter((f) => EXTENSIONES.has(path.extname(f).toLowerCase()))
@@ -72,9 +88,13 @@ async function main() {
     .map((f) => {
       // encodeURI, no el nombre crudo: los espacios, los acentos y un '#' en
       // el nombre del archivo rompen el src si van sin escapar.
-      const foto = { src: `fotos/${encodeURIComponent(f)}` };
-      const pie = pieDesdeNombre(f);
-      if (pie) foto.pie = pie;
+      const ruta = `fotos/${encodeURIComponent(f)}`;
+      const foto = { imagen: ruta, src: ruta };
+      const texto = mapaTextos.get(ruta) || mapaTextos.get(f) || pieDesdeNombre(f);
+      if (texto) {
+        foto.texto = texto;
+        foto.pie = texto;
+      }
       return foto;
     });
 

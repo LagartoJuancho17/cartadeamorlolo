@@ -128,3 +128,25 @@ test('el NO se achica y el SÍ crece, pero con tope', () => {
   assert.ok(c.no >= 0.55, 'el NO no puede desaparecer del todo');
   assert.ok(c.si <= 1.45, 'el SÍ no puede tapar la pantalla');
 });
+
+test('el botón no salta tres veces por un solo intento de clic', () => {
+  // pointermove, pointerdown y click llegan casi juntos: sólo el primero cuenta.
+  assert.equal(e.puedeSaltar(0), false, 'el segundo evento del mismo clic no salta');
+  assert.equal(e.puedeSaltar(12), false);
+  assert.equal(e.puedeSaltar(e.ESPERA_SALTO - 1), false);
+});
+
+test('un intento nuevo, un rato después, sí salta', () => {
+  assert.equal(e.puedeSaltar(e.ESPERA_SALTO), true);
+  assert.equal(e.puedeSaltar(1200), true);
+});
+
+test('el primer salto de todos no tiene nada que esperar', () => {
+  assert.equal(e.puedeSaltar(undefined), true);
+  assert.equal(e.puedeSaltar(NaN), true);
+});
+
+test('la espera entre saltos es corta: persiguiéndolo tiene que seguir huyendo', () => {
+  assert.ok(e.ESPERA_SALTO <= 300, `${e.ESPERA_SALTO} ms: se deja atrapar`);
+  assert.ok(e.ESPERA_SALTO >= 120, `${e.ESPERA_SALTO} ms: no alcanza a frenar el rebote triple`);
+});

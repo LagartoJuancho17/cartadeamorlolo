@@ -37,6 +37,14 @@ Poné las imágenes en la carpeta `fotos/` y corré:
 node bin/generar-galeria.mjs
 ```
 
+Si vienen directo del teléfono van a pesar varios MB cada una y la galería va a
+tardar una eternidad con datos móviles. Achicalas primero (mueve los originales
+a `.originales/`, no borra nada):
+
+```bash
+node bin/optimizar-fotos.mjs
+```
+
 Eso escribe `js/fotos-generado.js` con la lista ordenada. El nombre del archivo
 se convierte en el pie de foto:
 
@@ -49,7 +57,29 @@ se convierte en el pie de foto:
 
 Formatos: `.jpg`, `.jpeg`, `.png`, `.webp`, `.gif`, `.avif`.
 
-### 4. La canción (opcional)
+### 4. El sonido
+
+Ya viene con efectos y **no hay ningún archivo de audio**: todo se sintetiza con
+Web Audio en el momento, así que no pesa nada y funciona sin conexión.
+
+| Momento | Suena |
+|---|---|
+| Tensar el arco | zumbido grave que sube de tono, más un trinquete cada tanto |
+| Soltar | latigazo de la cuerda |
+| La flecha | silbido al cruzar la pantalla |
+| Al dar en el sobre | golpe grave, y después tres notas que suben al abrirse |
+| Apretar SÍ | fanfarria do-mi-sol-do |
+| Tocar el corazón del gato | dos latidos y una campanita |
+| Abrir y pasar fotos | un clic y un tic |
+
+El botón de arriba a la derecha lo prende y apaga todo. Lo que ella elija queda
+guardado en su navegador. Para que arranque en silencio, poné `sonido: false`
+en `contenido.js`.
+
+El botón NO es mudo a propósito: salta con tres eventos distintos por cada
+intento de clic y los sonidos se amontonaban.
+
+### 5. La canción (opcional)
 
 Poné un `.mp3` en `audio/` y en `contenido.js`:
 
@@ -57,8 +87,8 @@ Poné un `.mp3` en `audio/` y en `contenido.js`:
 cancion: 'audio/nuestra-cancion.mp3',
 ```
 
-Aparece un botón de música arriba a la derecha. Los navegadores no dejan que
-arranque sola, así que empieza cuando ella dispara la flecha o toca el botón.
+Los navegadores no dejan que arranque sola, así que empieza cuando ella dispara
+la flecha. La controla el mismo botón de sonido.
 
 ---
 
@@ -69,6 +99,7 @@ arranque sola, así que empieza cuando ella dispara la flecha o toca el botón.
 | Tensar el arco | rueda hacia abajo | arrastrar hacia abajo | ↓ o espacio |
 | Disparar | soltar, o tensar al tope | soltar el dedo | soltar la tecla |
 | El botón NO | se escapa | se escapa | se escapa |
+| Prender/apagar sonido | botón arriba a la derecha | ídem | Tab + Enter |
 | Galería | click | tocar / deslizar | Tab, Enter, ← → , Esc |
 
 Hay un enlace discreto **"saltear ♥"** abajo a la derecha que aparece a los 14
@@ -90,14 +121,18 @@ js/
   core/                   lógica pura, sin navegador, testeada
     duracion.js             cuánto tiempo llevan juntos
     arco.js                 tensión, disparo y geometría del arco
-    esquivar.js             adónde salta el botón NO
+    esquivar.js             adónde salta el botón NO, y cada cuánto
+    recetas-sonido.js       qué suena cada cosa, como datos
     lienzo.js               primitivas de pixel art
   sprites.js              el gato, el sobre, la flecha, los corazones
   corazones.js            las partículas
+  sonido.js               agenda las recetas en Web Audio
   galeria.js              grilla y visor de fotos
   app.js                  el pegamento: eventos y DOM
 bin/generar-galeria.mjs   arma la lista de fotos
-tests/                    107 tests, corren en menos de un segundo
+bin/optimizar-fotos.mjs   achica las fotos antes de publicarlas
+bin/armar-artifact.mjs    deriva la versión publicable de index.html
+tests/                    140 tests, corren en menos de un segundo
 ```
 
 La regla de la separación: **todo lo que se puede decidir con números vive en
@@ -119,9 +154,13 @@ Cubren, entre otras cosas:
 
 - aritmética de fechas con préstamos, años bisiestos y cambio de horario
 - que el botón NO nunca quede fuera de la ventana ni encima del SÍ
+- que un solo intento de clic lo haga saltar una vez y no tres
 - que se pueda tensar el arco a golpecitos sin que la cuerda se coma lo ganado
 - que la rueda del mouse funcione igual en Chrome y en Firefox (`deltaMode`)
 - la forma exacta, píxel por píxel, de cada sprite
+- que ningún sonido arranque ni termine fuera del silencio (si no, se oye un
+  clic seco), que ninguno sature al sumar sus voces y que ninguno quede tan
+  bajo que no se escuche en el parlante de un teléfono
 
 ---
 
@@ -138,4 +177,9 @@ python3 -m http.server 4173
 ```
 
 Un detalle antes de mandarla: si le pasás el link por WhatsApp, abrilo vos
-primero desde tu teléfono para ver que las fotos carguen.
+primero desde tu teléfono para ver que las fotos carguen y que el sonido suene.
+
+### Si editás algo y no ves el cambio
+
+Es la caché del navegador, que se queda con la versión vieja de los `.js`.
+Recargá con **Cmd + Shift + R**. `npm run dev` ya sirve sin caché.
