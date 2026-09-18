@@ -58,7 +58,9 @@ window.CONTENIDO = {
 
       'Me encanta ver cómo crecés, la fuerza que le ponés a todo y esa energía que transforma cualquier espacio en un lugar más divertido y familiar. Sos mi persona favorita para volver a casa, para salir a cualquier lado o para mimir siesta y no hacer absolutamente nada.',
 
-      'Te deseo proyectos que te apasionen, risas y toda la felicidad que siempre das, multiplicada por mil. Yo solo te prometo seguir estando al lado tuyo: para festejarte cada logro, darte la mano en las malas y seguir inventando apodos ridículos que solo nosotros entendamos.',
+      'Nos quedan muchas muchas cosas por hacer como comer más y más hasta reventar y no dar más, además de viajar muchooo por todo el mundo, hasta JAPPPOOOON PON PON.',
+
+      'Te deseo lo mejor, risas y toda la felicidad que siempre das, multiplicada por mil. Yo solo te prometo seguir estando al lado tuyo: para festejarte cada logro, darte la mano en las malas y seguir inventando apodos ridículos que solo nosotros entendamos.',
 
       'Gracias por estos dos años tan hermosos de los cuales me llevo los recuerdos mas lindos de mi vida.',
 
