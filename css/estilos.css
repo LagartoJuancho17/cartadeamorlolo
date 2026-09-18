@@ -91,7 +91,12 @@ img { max-width: 100%; display: block; }
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: var(--gutter);
+  /* max() con los insets: en un iPhone con notch, el contador y el sobre no
+     se meten debajo de la barra de estado ni de la barra de gestos */
+  padding: max(var(--gutter), env(safe-area-inset-top, 0px))
+           max(var(--gutter), env(safe-area-inset-right, 0px))
+           max(var(--gutter), env(safe-area-inset-bottom, 0px))
+           max(var(--gutter), env(safe-area-inset-left, 0px));
   overflow-y: auto;
   overscroll-behavior: contain;
   opacity: 0;
