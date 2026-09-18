@@ -21,7 +21,7 @@ window.CONTENIDO = {
   /* --- La fecha ------------------------------------------------------------ */
   // El día que se pusieron de novios. Si te acordás la hora, podés escribir
   // '2024-09-18T21:30' y el contador va a ser exacto hasta el segundo.
-  fechaInicio: '2024-09-19',        // <-- CAMBIÁ ESTO
+  fechaInicio: '2024-09-15',        // <-- CAMBIÁ ESTO
 
   /* --- El sobre (primera pantalla) ----------------------------------------- */
   sobre: {
@@ -47,7 +47,7 @@ window.CONTENIDO = {
    *  Reemplazalo por tu carta. Cada string de "parrafos" es un párrafo.
    * ------------------------------------------------------------------------- */
   carta: {
-    titulo: 'Para vos',
+    titulo: 'Para Lolito',
     saludo: 'Mi amor,',
     parrafos: [
       'Lo, Lolo, Lola, Lolita, y demás apodos que te puse y te pondré en el futuro.',
